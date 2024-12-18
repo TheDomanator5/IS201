@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NBA Team Guessing Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .game-container {
+            margin-top: 20px;
+        }
+        input[type="text"] {
+            padding: 5px;
+            font-size: 18px;
+            width: 200px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .message {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>NBA Team Guessing Game</h1>
+    <p>Guess which team the displayed player plays for.</p>
+    
+    <div class="game-container">
+        <h2 id="player-name">Player Name</h2>
+        <input type="text" id="team-guess" placeholder="Enter team name">
+        <button onclick="checkAnswer()">Submit Guess</button>
+        <div class="message" id="message"></div>
+    </div>
+
+    <script>
+        const players = [
+        { name: "Malcolm Brogdon", team: "Washington Wizards" },
+    { name: "Collin Sexton", team: "Utah Jazz" },
+    { name: "Chris Paul", team: "San Antonio Spurs" },
+    { name: "Deandre Ayton", team: "Portland Trail Blazers" },
+    { name: "Donte DiVincenzo", team: "Minnesota Timberwolves" },
+    { name: "Andrew Nembhard", team: "Indiana Pacers" },
+    { name: "Austin Reaves", team: "Los Angeles Lakers" },
+    { name: "Jonathan Kuminga", team: "Golden State Warriors" },
+    { name: "Dereck Lively II", team: "Dallas Mavericks" },
+    { name: "Nikola Vucevic", team: "Chicago Bulls" },
+    { name: "Jalen Suggs", team: "Orlando Magic" },
+    { name: "Andrew Wiggins", team: "Golden State Warriors" },
+    { name: "Klay Thompson", team: "Dallas Mavericks" },
+    { name: "Alex Caruso", team: "Oklahoma City Thunder" },
+    { name: "Marcus Smart", team: "Memphis Grizzlies" },
+    { name: "Kentavious Caldwell-Pope", team: "Orlando Magic" },
+    { name: "Herb Jones", team: "New Orleans Pelicans" },
+    { name: "Kyle Kuzma", team: "Washington Wizards" },
+    { name: "Trey Murphy III", team: "New Orleans Pelicans" },
+    { name: "Naz Reid", team: "Minnesota Timberwolves" },
+    { name: "Devin Vassell", team: "San Antonio Spurs" },
+    { name: "RJ Barrett", team: "Toronto Raptors" },
+    { name: "Malik Monk", team: "Sacramento Kings" },
+    { name: "Coby White", team: "Chicago Bulls" },
+    { name: "Jalen Green", team: "Houston Rockets" },
+    { name: "Josh Hart", team: "New York Knicks" },
+    { name: "Tyler Herro", team: "Miami Heat" },
+    { name: "Jaden McDaniels", team: "Minnesota Timberwolves" },
+    { name: "Brandon Miller", team: "Charlotte Hornets" },
+    { name: "Immanuel Quickley", team: "Toronto Raptors" },
+    { name: "Anfernee Simons", team: "Portland Trail Blazers" },
+    { name: "Michael Porter Jr.", team: "Denver Nuggets" },
+    { name: "Brook Lopez", team: "Milwaukee Bucks" },
+    { name: "Nix Claxton", team: "Brooklyn Nets" },
+    { name: "Myles Turner", team: "Indiana Pacers" },
+    { name: "Zach LaVine", team: "Chicago Bulls" },
+    { name: "CJ McCollum", team: "New Orleans Pelicans" },
+    { name: "Jerami Grant", team: "Portland Trail Blazers" },
+    { name: "Fred VanVleet", team: "Houston Rockets" },
+    { name: "Jarrett Allen", team: "Cleveland Cavaliers" },
+    { name: "Aaron Gordon", team: "Denver Nuggets" },
+    { name: "Chet Holmgren", team: "Oklahoma City Thunder" },
+    { name: "Darius Garland", team: "Cleveland Cavaliers" },
+    { name: "Desmond Bane", team: "Memphis Grizzlies" },
+    { name: "Jalen Williams", team: "Oklahoma City Thunder" },
+    { name: "Rudy Gobert", team: "Minnesota Timberwolves" },
+    { name: "Dejounte Murray", team: "New Orleans Pelicans" },
+    { name: "Draymond Green", team: "Golden State Warriors" },
+    { name: "Scottie Barnes", team: "Toronto Raptors" },
+    { name: "Bradley Beal", team: "Phoenix Suns" },
+    { name: "Khris Middleton", team: "Milwaukee Bucks" },
+    { name: "Derrick White", team: "Boston Celtics" },
+    { name: "OG Anunoby", team: "New York Knicks" },
+    { name: "Jaren Jackson Jr.", team: "Memphis Grizzlies" },
+    { name: "Jrue Holiday", team: "Boston Celtics" },
+    { name: "Trae Young", team: "Atlanta Hawks" },
+    { name: "Kristaps Porzingis", team: "Boston Celtics" },
+    { name: "Cade Cunningham", team: "Detroit Pistons" },
+    { name: "Alperen Sengun", team: "Houston Rockets" },
+    { name: "Evan Mobley", team: "Cleveland Cavaliers" },
+    { name: "Brandon Miller", team: "New Orleans Pelicans" },
+    { name: "Mikal Bridges", team: "New York Knicks" },
+    { name: "Franz Wagner", team: "Orlando Magic" },
+    { name: "Julius Randle", team: "New York Knicks" },
+    { name: "James Harden", team: "Los Angeles Clippers" },
+    { name: "DeMar DeRozan", team: "Sacramento Kings" },
+    { name: "Tyrese Maxey", team: "Philadelphia 76ers" },
+    { name: "Karl-Anthony Towns", team: "New York Knicks" },
+    { name: "Bam Adebayo", team: "Miami Heat" },
+    { name: "Lauri Markkanen", team: "Utah Jazz" },
+    { name: "LaMelo Ball", team: "Charlotte Hornets" },
+    { name: "Jamal Murray", team: "Denver Nuggets" },
+    { name: "Pascal Siakam", team: "Indiana Pacers" },
+    { name: "Paolo Banchero", team: "Orlando Magic" },
+    { name: "Tyrese Haliburton", team: "Indiana Pacers" },
+    { name: "Giannis Antetokounmpo", team: "Milwaukee Bucks" },
+    { name: "Nikola Jokic", team: "Denver Nuggets" },
+    { name: "Luka Dončić", team: "Dallas Mavericks" },
+    { name: "Stephen Curry", team: "Golden State Warriors" },
+    { name: "LeBron James", team: "Los Angeles Lakers" },
+    { name: "Jayson Tatum", team: "Boston Celtics" },
+    { name: "Anthony Edwards", team: "Minnesota Timberwolves" },
+    { name: "Shai Gilgeous-Alexander", team: "Oklahoma City Thunder" },
+    { name: "Victor Wembanyama", team: "San Antonio Spurs" },
+    { name: "Kevin Durant", team: "Phoenix Suns" },
+    { name: "James Wiseman", team: "Detroit Pistons" },
+    { name: "Zion Williamson", team: "New Orleans Pelicans" },
+    { name: "Jaden Ivey", team: "Detroit Pistons" },
+    { name: "Tyrese Haliburton", team: "Indiana Pacers" },
+    { name: "Jaren Jackson Jr.", team: "Memphis Grizzlies" },
+    { name: "Jokic Nikola", team: "Denver Nuggets" },
+    { name: "Chet Holmgren", team: "Oklahoma City Thunder" },
+    { name: "Luka Doncic", team: "Dallas Mavericks" },
+      
+            // Add more players here
+        ];
+
+        let currentPlayer = getRandomPlayer();
+
+        // Display random player's name
+        document.getElementById("player-name").innerText = currentPlayer.name;
+
+        function getRandomPlayer() {
+            return players[Math.floor(Math.random() * players.length)];
+        }
+
+        function checkAnswer() {
+            const userGuess = document.getElementById("team-guess").value.trim();
+            const messageElement = document.getElementById("message");
+
+            if (userGuess.toLowerCase() === currentPlayer.team.toLowerCase()) {
+                messageElement.innerText = "Correct! Great job!";
+                messageElement.style.color = "green";
+            } else {
+                messageElement.innerText = `Wrong! The correct team is ${currentPlayer.team}.`;
+                messageElement.style.color = "red";
+            }
+
+            // Get a new random player after the guess
+            currentPlayer = getRandomPlayer();
+            document.getElementById("player-name").innerText = currentPlayer.name;
+            document.getElementById("team-guess").value = ""; // Clear the input field
+        }
+    </script>
+</body>
+</html>
